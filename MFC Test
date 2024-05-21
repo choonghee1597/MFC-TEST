@@ -1,0 +1,68 @@
+#include "pch.h"
+#include "MyApp.h"
+#include "MyView.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+IMPLEMENT_DYNCREATE(CMyView, CView)
+
+BEGIN_MESSAGE_MAP(CMyView, CView)
+    // 여기에 메시지 매핑 코드를 추가합니다.
+END_MESSAGE_MAP()
+
+CMyView::CMyView() noexcept {
+    // 초기화 코드
+}
+
+BOOL CMyView::PreCreateWindow(CREATESTRUCT& cs) {
+    // 기본 창을 만들기 전에 창을 수정하려면 이 코드를 수정하십시오.
+    return CView::PreCreateWindow(cs);
+}
+
+void CMyView::OnDraw(CDC* pDC) {
+    CMyDoc* pDoc = GetDocument();
+    ASSERT_VALID(pDoc);
+    if (!pDoc) return;
+
+    // 배경을 흰색으로 설정
+    pDC->FillSolidRect(CRect(0, 0, 1000, 1000), RGB(255, 255, 255));
+
+    // 삼각형 그리기
+    CPoint triangle[3] = { CPoint(100, 100), CPoint(200, 100), CPoint(150, 50) };
+    pDC->Polygon(triangle, 3);
+
+    // 오각형 그리기
+    CPoint pentagon[5];
+    for (int i = 0; i < 5; ++i) {
+        double angle = 2 * 3.14159265358979323846 * i / 5;
+        pentagon[i].x = 300 + 50 * cos(angle);
+        pentagon[i].y = 100 + 50 * sin(angle);
+    }
+    pDC->Polygon(pentagon, 5);
+
+    // 육각형 그리기
+    CPoint hexagon[6];
+    for (int i = 0; i < 6; ++i) {
+        double angle = 2 * 3.14159265358979323846 * i / 6;
+        hexagon[i].x = 450 + 50 * cos(angle);
+        hexagon[i].y = 100 + 50 * sin(angle);
+    }
+    pDC->Polygon(hexagon, 6);
+}
+
+#ifdef _DEBUG
+void CMyView::AssertValid() const {
+    CView::AssertValid();
+}
+
+void CMyView::Dump(CDumpContext& dc) const {
+    CView::Dump(dc);
+}
+
+CMyDoc* CMyView::GetDocument() const {
+    ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CMyDoc)));
+    return (CMyDoc*)m_pDocument;
+}
+#endif //_DEBUG
